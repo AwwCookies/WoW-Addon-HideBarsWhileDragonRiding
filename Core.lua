@@ -2,13 +2,13 @@ local f = CreateFrame("Frame")
 
 -- all action bars in game minus main bar
 local bars = {
-   MultiBarBottomLeft,
-   MultiBarBottomRight,
-   MultiBarLeft,
-   MultiBarRight,
-   MultiBar5,
-   MultiBar6,
-   MultiBar7
+   MultiBarBottomLeft, -- action bar 2
+   MultiBarBottomRight, -- action bar 3
+   MultiBarLeft, -- action bar 4
+   MultiBarRight, -- action bar 5
+   MultiBar5, -- action bar 6
+   MultiBar6, -- action bar 7
+   MultiBar7 -- action bar 9
 }
 
 -- Dragon Riding Auras
@@ -17,14 +17,14 @@ local dragonRidingAuras = {
    "Renewed Proto-Drake",
    "Windborne Velocidrake",
    "Highland Drake",
-   "Soar"
+   "Soar" -- Dracthyr Racial
 }
 
 -- stores bars player had shown
 local hiddenBars = {}
 
 local function isDragonRiding()
-   local isDragonRiding = false
+   local _isDragonRiding = false
    -- meta function to reference auraName to dragonRidingAuras table
    local function isDragonRidingMount(auraName)
       for k, v in pairs(dragonRidingAuras) do
@@ -38,15 +38,17 @@ local function isDragonRiding()
    -- loop through all player auras and check them against the known Dragon Riding Mounts
    AuraUtil.ForEachAura("player", "HELPFUL", nil, function(name, ...)
       if (isDragonRidingMount(name)) then
-         isDragonRiding = true
+         _isDragonRiding = true
       end
    end)
 
-   return isDragonRiding
+   return _isDragonRiding
 end
 
+-- hide players action bars and store which ones
+-- they have open
 local function hideBars()
-   for _,bar in pairs(bars) do
+   for _, bar in pairs(bars) do
       if (bar:IsShown()) then
          bar:Hide()
          table.insert(hiddenBars, bar)
@@ -54,8 +56,9 @@ local function hideBars()
    end
 end
 
-local function showBars()
-   for _,bar in pairs(hiddenBars) do
+-- restore players bars
+local function restoreBars()
+   for _, bar in pairs(hiddenBars) do
       bar:Show()
    end
 end
@@ -66,7 +69,7 @@ f:SetScript("OnUpdate", function()
       if (isDragonRiding()) then
          hideBars() -- if Dragon Riding then hide bars
       else
-         showBars() -- if not show/restore bars
+         restoreBars() -- if not show/restore bars
       end
    end
 end)
