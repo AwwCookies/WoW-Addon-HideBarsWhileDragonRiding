@@ -1,0 +1,7 @@
+## Interface: 100002
+## Version: 1.0.0
+## Title: Hide Bars While Dragon Riding
+## Notes: Hides extra action bars while Dragon Riding
+## Author: Aww
+
+Core.lua
