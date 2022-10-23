@@ -37,7 +37,7 @@ local function isDragonRiding()
 
    -- loop through all player auras and check them against the known Dragon Riding Mounts
    AuraUtil.ForEachAura("player", "HELPFUL", nil, function(name, ...)
-      if (isDragonRidingMount(name)) then
+      if (tContains(dragonRidingAuras, name)) then
          _isDragonRiding = true
       end
    end)
