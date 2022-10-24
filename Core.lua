@@ -68,3 +68,4 @@ f:SetScript("OnEvent", function()
 end)
 
 f:RegisterEvent("UNIT_AURA")
+f:RegisterEvent("PLAYER_LOGIN")
