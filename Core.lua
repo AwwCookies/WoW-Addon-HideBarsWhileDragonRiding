@@ -25,16 +25,6 @@ local hiddenBars = {}
 
 local function isDragonRiding()
    local _isDragonRiding = false
-   -- meta function to reference auraName to dragonRidingAuras table
-   local function isDragonRidingMount(auraName)
-      for k, v in pairs(dragonRidingAuras) do
-         if (auraName == v) then
-            return true
-         end
-      end
-      return false
-   end
-
    -- loop through all player auras and check them against the known Dragon Riding Mounts
    AuraUtil.ForEachAura("player", "HELPFUL", nil, function(name, ...)
       if (tContains(dragonRidingAuras, name)) then
@@ -63,7 +53,7 @@ local function restoreBars()
    end
 end
 
-f:SetScript("OnUpdate", function()
+f:SetScript("OnEvent", function()
    -- check if DragonRiding or using Soar
    if (IsMounted() or IsFlying()) then
       if (isDragonRiding()) then
@@ -73,3 +63,5 @@ f:SetScript("OnUpdate", function()
       end
    end
 end)
+
+f:RegisterEvent("UNIT_AURA")
