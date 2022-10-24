@@ -24,6 +24,11 @@ local dragonRidingAuras = {
 local hiddenBars = {}
 
 local function isDragonRiding()
+   -- if player isn't mounted then they can't be
+   -- Dragon Riding so we can return early
+   if (not IsMounted()) then
+      return false
+   end
    local _isDragonRiding = false
    -- loop through all player auras and check them against the known Dragon Riding Mounts
    AuraUtil.ForEachAura("player", "HELPFUL", nil, function(name, ...)
@@ -55,13 +60,11 @@ end
 
 f:SetScript("OnEvent", function()
    -- check if DragonRiding or using Soar
-   if (IsMounted() or IsFlying()) then
       if (isDragonRiding()) then
          hideBars() -- if Dragon Riding then hide bars
       else
          restoreBars() -- if not show/restore bars
       end
-   end
 end)
 
 f:RegisterEvent("UNIT_AURA")
