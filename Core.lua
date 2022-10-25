@@ -20,6 +20,9 @@ local dragonRidingAuras = {
    "Soar" -- Dracthyr Racial
 }
 
+local soarSpellId = 369536 -- Soar, Dracthyr Racial
+
+
 -- stores bars player had shown
 local hiddenBars = {}
 
@@ -31,11 +34,27 @@ local function isDragonRiding()
    end
    local _isDragonRiding = false
    -- loop through all player auras and check them against the known Dragon Riding Mounts
-   AuraUtil.ForEachAura("player", "HELPFUL", nil, function(name, ...)
-      if (tContains(dragonRidingAuras, name)) then
-         _isDragonRiding = true
-      end
-   end)
+   -- AuraUtil.ForEachAura("player", "HELPFUL", nil, function(name, ...)
+   --    if (tContains(dragonRidingAuras, name)) then
+   --       _isDragonRiding = true
+   --    end
+   -- end)
+
+   -- Future proofing? this is prob slower but doesn't require a table with
+   -- all known Dragon Riding mounts
+   if (not _isDragonRiding) then
+      local searchText = "This is a dragonriding mount"
+      AuraUtil.ForEachAura("player", "HELPFUL", nil, function(...)
+         local spellId = select(10, ...) -- get spellID
+         local spell = Spell:CreateFromSpellID(spellId)
+         if (spellId == soarSpellId) then
+            _isDragonRiding = true
+         end
+         if (string.find(spell:GetSpellDescription(), searchText) ~= nil) then
+            _isDragonRiding = true
+         end
+      end)
+   end
 
    return _isDragonRiding
 end
